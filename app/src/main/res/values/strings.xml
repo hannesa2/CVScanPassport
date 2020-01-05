@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CV Scan passport</string>
+    <string name="action_step_by_step">Step by Step</string>
+    <string name="action_settings">Settings</string>
+</resources>

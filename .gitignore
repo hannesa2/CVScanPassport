@@ -1,0 +1,14 @@
+target
+!.idea/
+.idea/*
+!codeStyleSettings.xml
+
+*.iml
+.gradle
+local.properties
+.DS_Store
+build
+gradle.properties
+
+# raspberry
+json
