@@ -19,7 +19,6 @@ import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 
-@TargetApi(21)
 public class Camera2Renderer extends CameraGLRendererBase {
 
     protected final String LOGTAG = "Camera2Renderer";

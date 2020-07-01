@@ -1,11 +1,13 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
 
     defaultConfig {
         applicationId "devliving.online.cvscannersample"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 3
         versionName "1.0.2"
