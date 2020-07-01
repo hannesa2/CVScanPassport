@@ -119,7 +119,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageViewHolder> {
             notifyDataSetChanged();
 
             for (String path : paths) {
-                Utility.deleteFilePermanently(path);
+                Utility.INSTANCE.deleteFilePermanently(path);
             }
         }
 
