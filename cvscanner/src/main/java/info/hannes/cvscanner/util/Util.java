@@ -48,8 +48,7 @@ public final class Util {
                 storageDir.mkdirs();
         }
 
-        File image = File.createTempFile(fileName,
-                fileExtension, storageDir);
+        File image = File.createTempFile(fileName, fileExtension, storageDir);
 
         // Save a file: path for use with ACTION_VIEW intents
         Uri currentPhotoUri = getUriForFile(context, image);
@@ -67,9 +66,7 @@ public final class Util {
      * @return
      */
     public static Uri getUriForFile(Context context, File file) {
-        return CVFileProvider.getUriForFile(context,
-                CVScanner.getFileproviderName(context),
-                file);
+        return CVFileProvider.getUriForFile(context, CVScanner.getFileproviderName(context), file);
     }
 
     public static Uri getUriFromPath(String path) {

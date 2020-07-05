@@ -25,6 +25,7 @@ import online.devliving.mobilevisionpipeline.Util;
 
 
 public class PassportDetector extends Detector<Document> {
+
     private Util.FrameSizeProvider frameSizeProvider;
 
     public PassportDetector(Util.FrameSizeProvider sizeProvider) {
@@ -57,8 +58,6 @@ public class PassportDetector extends Detector<Document> {
             fOut.flush();
             fOut.close();
             return file.getAbsolutePath();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

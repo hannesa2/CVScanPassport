@@ -23,15 +23,6 @@ public class Line {
 
         this.start = start;
         this.end = end;
-            /*if(start.x < end.x || (start.x == end.x && start.y < end.y)) {
-                this.start = start;
-                this.end = end;
-            }
-            else{
-                this.start = end;
-                this.end = start;
-            }*/
-
         findSlope();
     }
 
@@ -105,8 +96,6 @@ public class Line {
                 //      + ", line 2: -> start: " + sLine.start + " end: " + sLine.end);
                 return merge(Arrays.asList(fLine.start, fLine.end, sLine.start, sLine.end), true);
             }
-            //Log.d("SCANNER", "NOT MERGING: yDiff: " + yDiff + ", line 1: -> start: " + fLine.start + " end: " + fLine.end
-            //      + ", line 2: -> start: " + sLine.start + " end: " + sLine.end);
         } else if (isNearVertical() && line.isNearVertical()) {
             Line fLine = this;
             Line sLine = line;
@@ -114,15 +103,10 @@ public class Line {
                 fLine = line;
                 sLine = this;
             }
-            //double slopeDiff = Math.abs(fLine.slope - sLine.slope);
             double xDiff = Math.abs(Math.min(Math.min(fLine.start.x - sLine.start.x, fLine.start.x - sLine.end.x), Math.min(fLine.end.x - sLine.end.x, fLine.end.x - sLine.start.x)));
             if (xDiff < DIFF_THRESHOLD) {
-                //Log.d("SCANNER", "MERGING: xDiff: " + xDiff + ", line 1: -> start: " + fLine.start + " end: " + fLine.end
-                // + ", line 2: -> start: " + sLine.start + " end: " + sLine.end);
                 return merge(Arrays.asList(fLine.start, fLine.end, sLine.start, sLine.end), false);
             }
-            //Log.d("SCANNER", "NOT MERGING: xDiff: " + xDiff + ", line 1: -> start: " + fLine.start + " end: " + fLine.end
-            //      + ", line 2: -> start: " + sLine.start + " end: " + sLine.end);
         }
         return null;
     }
@@ -140,11 +124,9 @@ public class Line {
 
     public boolean isNearVertical() {
         return slope == INIFINITE_SLOPE || slope > 5.671;
-        //return Math.abs(start.x - end.x) < 10;
     }
 
     public boolean isNearHorizontal() {
         return slope < 0.176;
-        //return Math.abs(start.y - end.y) < 10;
     }
 }

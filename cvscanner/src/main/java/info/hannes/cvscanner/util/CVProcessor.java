@@ -28,9 +28,6 @@ public class CVProcessor {
     public final static float PASSPORT_ASPECT_RATIO = 3.465f / 4.921f;
     final static String TAG = "CV-PROCESSOR";
     final static int FIXED_HEIGHT = 800;
-    private final static double COLOR_GAIN = 1.5;       // contrast
-    private final static double COLOR_BIAS = 0;         // bright
-    private final static int COLOR_THRESH = 110;        // threshold
 
     public static Mat buildMatFromYUV(byte[] nv21Data, int width, int height) {
         Mat yuv = new Mat(height + (height / 2), width, CvType.CV_8UC1);
@@ -610,7 +607,7 @@ public class CVProcessor {
         // bottom-right corner = maximal sum
         result[2] = Collections.max(srcPoints, sumComparator);
 
-        // top-right corner = minimal diference
+        // top-right corner = minimal difference
         result[1] = Collections.min(srcPoints, diffComparator);
 
         // bottom-left corner = maximal difference

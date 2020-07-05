@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.drawable.DrawableCompat;
 
@@ -89,7 +90,7 @@ public class DocumentScannerFragment extends BaseFragment implements View.OnTouc
     }
 
     @Override
-    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+    public void onInflate(@NonNull Context context, @NonNull AttributeSet attrs, Bundle savedInstanceState) {
         super.onInflate(context, attrs, savedInstanceState);
 
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.DocumentScannerFragment);
@@ -142,7 +143,7 @@ public class DocumentScannerFragment extends BaseFragment implements View.OnTouc
         Bundle args = getArguments();
         isPassport = args != null && args.getBoolean(DocumentScannerActivity.EXTRA_IS_PASSPORT, false);
 
-        Resources.Theme theme = getActivity().getTheme();
+        Resources.Theme theme = requireActivity().getTheme();
         TypedValue borderColor = new TypedValue();
         if (theme.resolveAttribute(android.R.attr.colorPrimary, borderColor, true)) {
             documentBorderColor = borderColor.resourceId > 0 ? getResources().getColor(borderColor.resourceId) : borderColor.data;
@@ -180,7 +181,7 @@ public class DocumentScannerFragment extends BaseFragment implements View.OnTouc
         if (mCameraSource != null) {
             int tintColor = torchTintColor;
 
-            if (mCameraSource.getFlashMode() == Camera.Parameters.FLASH_MODE_TORCH) {
+            if (mCameraSource.getFlashMode().equals(Camera.Parameters.FLASH_MODE_TORCH)) {
                 tintColor = torchTintColorLight;
             }
 
@@ -221,8 +222,7 @@ public class DocumentScannerFragment extends BaseFragment implements View.OnTouc
         if (documentBorderColor != -1) graphic.setBorderColor(documentBorderColor);
         if (documentBodyColor != -1) graphic.setFillColor(documentBodyColor);
 
-        DocumentProcessor processor = new DocumentProcessor(IDDetector,
-                new DocumentTracker(mGraphicOverlay, graphic, this));
+        DocumentProcessor processor = new DocumentProcessor(IDDetector, new DocumentTracker(mGraphicOverlay, graphic, this));
         IDDetector.setProcessor(processor);
 
         // Creates and starts the camera.  Note that this uses a higher resolution in comparison
@@ -299,7 +299,7 @@ public class DocumentScannerFragment extends BaseFragment implements View.OnTouc
     public void onDocumentDetected(final Document document) {
         Log.d("Scanner", "document detected");
         if (document != null) {
-            getActivity().runOnUiThread(new Runnable() {
+            requireActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (mCameraSource != null) mCameraSource.stop();

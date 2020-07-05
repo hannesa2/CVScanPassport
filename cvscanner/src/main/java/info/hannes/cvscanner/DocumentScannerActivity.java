@@ -22,23 +22,20 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 public class DocumentScannerActivity extends AppCompatActivity implements CVScanner.ImageProcessorCallback {
-    // constants used to pass extra data in the intent
+
     public static final String EXTRA_DOCUMENT_BORDER_COLOR = "border_color";
     public static final String EXTRA_DOCUMENT_BODY_COLOR = "body_color";
     public static final String EXTRA_TORCH_TINT_COLOR = "torch_tint_color";
     public static final String EXTRA_TORCH_TINT_COLOR_LIGHT = "torch_tint_color_light";
     public static final String EXTRA_IS_PASSPORT = "is_passport";
     private static final String TAG = "ID-reader";
-    // intent request code to handle updating play services if needed.
     private static final int RC_HANDLE_GMS = 9001;
-    // permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN |
-                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -58,7 +55,8 @@ public class DocumentScannerActivity extends AppCompatActivity implements CVScan
     protected void onResume() {
         super.onResume();
 
-        if (getSupportFragmentManager().getFragments() == null || getSupportFragmentManager().getFragments().size() == 0) {
+        getSupportFragmentManager().getFragments();
+        if (getSupportFragmentManager().getFragments().size() == 0) {
             checkCameraPermission();
         }
     }
@@ -74,11 +72,9 @@ public class DocumentScannerActivity extends AppCompatActivity implements CVScan
 
     void checkPlayServices() {
         // check that the device has play services available.
-        int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(
-                getApplicationContext());
+        int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getApplicationContext());
         if (code != ConnectionResult.SUCCESS) {
-            Dialog dlg =
-                    GoogleApiAvailability.getInstance().getErrorDialog(this, code, RC_HANDLE_GMS);
+            Dialog dlg = GoogleApiAvailability.getInstance().getErrorDialog(this, code, RC_HANDLE_GMS);
             dlg.show();
         } else {
             addScannerFragment();
@@ -89,7 +85,7 @@ public class DocumentScannerActivity extends AppCompatActivity implements CVScan
         Bundle extras = getIntent().getExtras();
         boolean isScanningPassport = extras != null && getIntent().getBooleanExtra(EXTRA_IS_PASSPORT, false);
 
-        DocumentScannerFragment fragment = null;
+        DocumentScannerFragment fragment;
 
         if (extras != null) {
             int borderColor = extras.getInt(EXTRA_DOCUMENT_BORDER_COLOR, -1);
@@ -117,8 +113,7 @@ public class DocumentScannerActivity extends AppCompatActivity implements CVScan
 
         final String[] permissions = new String[]{Manifest.permission.CAMERA};
 
-        if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.CAMERA)) {
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
             ActivityCompat.requestPermissions(this, permissions, RC_HANDLE_CAMERA_PERM);
             return;
         }
@@ -131,8 +126,7 @@ public class DocumentScannerActivity extends AppCompatActivity implements CVScan
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(thisActivity, permissions,
-                                RC_HANDLE_CAMERA_PERM);
+                        ActivityCompat.requestPermissions(thisActivity, permissions, RC_HANDLE_CAMERA_PERM);
                     }
                 }).show();
     }
@@ -154,9 +148,7 @@ public class DocumentScannerActivity extends AppCompatActivity implements CVScan
      * @see #requestPermissions(String[], int)
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode != RC_HANDLE_CAMERA_PERM) {
             Log.d(TAG, "Got unexpected permission result: " + requestCode);
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -170,8 +162,7 @@ public class DocumentScannerActivity extends AppCompatActivity implements CVScan
             return;
         }
 
-        Log.e(TAG, "Permission not granted: results len = " + grantResults.length +
-                " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
+        Log.e(TAG, "Permission not granted: results len = " + grantResults.length + " Result code = " + (grantResults.length > 0 ? grantResults[0] : "(empty)"));
 
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
