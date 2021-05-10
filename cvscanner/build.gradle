@@ -27,7 +27,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.exifinterface:exifinterface:1.3.2'
-    implementation 'com.google.android.gms:play-services-basement:17.3.0'
+    implementation 'com.google.android.gms:play-services-basement:17.6.0'
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
     implementation 'online.devliving:mobilevision-pipeline:1.0.8'
     api project(":openCVLibrary340")
