@@ -33,5 +33,5 @@ dependencies {
     // The source code of OpenCV is here https://git.mxtracks.info/opencv/openCV-android-sdk
     // The code was too big for github, but the main problem was jitpack.io was not able to build
     // https://github.com/jitpack/jitpack.io/issues/4119
-    api "opencv_samples:opencv:4.3.0"
+    api "opencv_samples:opencv:4.5.0"
 }
