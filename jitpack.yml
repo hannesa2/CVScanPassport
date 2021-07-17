@@ -1,0 +1,3 @@
+install:
+  - ./gradlew :cvscanner:build :cvscanner:publishToMavenLocal -x :cvscanner:test
+  - find . -name "*.aar"
