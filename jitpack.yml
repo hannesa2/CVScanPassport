@@ -1,3 +1,5 @@
+jdk:
+  - openjdk11
 install:
   - ./gradlew :cvscanner:build :cvscanner:publishToMavenLocal -x :cvscanner:test
   - find . -name "*.aar"
