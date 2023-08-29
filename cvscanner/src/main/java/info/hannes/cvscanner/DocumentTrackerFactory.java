@@ -3,7 +3,8 @@ package info.hannes.cvscanner;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.Tracker;
 
-import online.devliving.mobilevisionpipeline.GraphicOverlay;
+import androidx.annotation.NonNull;
+import info.hannes.visionpipeline.GraphicOverlay;
 
 public class DocumentTrackerFactory implements MultiProcessor.Factory<Document> {
     GraphicOverlay<DocumentGraphic> mOverlay;
@@ -14,8 +15,9 @@ public class DocumentTrackerFactory implements MultiProcessor.Factory<Document> 
         this.mListener = mListener;
     }
 
+    @NonNull
     @Override
-    public Tracker<Document> create(Document document) {
+    public Tracker<Document> create(@NonNull Document document) {
         DocumentGraphic graphic = new DocumentGraphic(mOverlay, document);
         return new DocumentTracker(mOverlay, graphic, mListener);
     }

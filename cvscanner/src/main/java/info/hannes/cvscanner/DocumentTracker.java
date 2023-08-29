@@ -3,7 +3,7 @@ package info.hannes.cvscanner;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;
 
-import online.devliving.mobilevisionpipeline.GraphicOverlay;
+import info.hannes.visionpipeline.GraphicOverlay;
 
 public class DocumentTracker extends Tracker<Document> {
     GraphicOverlay<DocumentGraphic> mOverlay;

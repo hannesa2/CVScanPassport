@@ -15,26 +15,27 @@ import org.opencv.core.Rect;
 import org.opencv.core.Size;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import info.hannes.cvscanner.util.CVProcessor;
-import online.devliving.mobilevisionpipeline.Util;
+import info.hannes.visionpipeline.Util;
 
 
 public class PassportDetector extends Detector<Document> {
 
-    private Util.FrameSizeProvider frameSizeProvider;
+    private final Util.FrameSizeProvider frameSizeProvider;
 
     public PassportDetector(Util.FrameSizeProvider sizeProvider) {
         super();
         this.frameSizeProvider = sizeProvider;
     }
 
+    @NonNull
     @Override
-    public SparseArray<Document> detect(Frame frame) {
+    public SparseArray<Document> detect(@NonNull Frame frame) {
         SparseArray<Document> detections = new SparseArray<>();
         Document doc = detectDocument(frame);
 
