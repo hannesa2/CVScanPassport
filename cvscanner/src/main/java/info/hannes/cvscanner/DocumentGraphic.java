@@ -7,7 +7,7 @@ import android.graphics.Path;
 import android.graphics.drawable.shapes.PathShape;
 import android.util.Log;
 
-import online.devliving.mobilevisionpipeline.GraphicOverlay;
+import info.hannes.visionpipeline.GraphicOverlay;
 
 public class DocumentGraphic extends GraphicOverlay.Graphic {
     int Id;

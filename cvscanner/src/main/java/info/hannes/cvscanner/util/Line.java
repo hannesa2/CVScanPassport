@@ -31,7 +31,7 @@ public class Line {
     }
 
     public static List<Line> joinSegments(List<Line> segments) {
-        Deque<Line> stack = new ArrayDeque();
+        Deque<Line> stack = new ArrayDeque<>();
         stack.push(segments.get(0));
 
         for (int i = 1; i < segments.size(); i++) {
@@ -79,7 +79,6 @@ public class Line {
 
     public Line merge(Line line) {
         final int DIFF_THRESHOLD = 40;
-        final double DIFF_SLOPE = 0.176;
 
         if (isNearHorizontal() && line.isNearHorizontal()) {
             Line fLine = this;
@@ -92,8 +91,6 @@ public class Line {
             double yDiff = Math.abs(Math.min(Math.min(fLine.start.y - sLine.start.y, fLine.start.y - sLine.end.y), Math.min(fLine.end.y - sLine.end.y, fLine.end.y - sLine.start.y)));
 
             if (yDiff < DIFF_THRESHOLD) {
-                //Log.d("SCANNER", "MERGING: yDiff: " + yDiff + ", line 1: -> start: " + fLine.start + " end: " + fLine.end
-                //      + ", line 2: -> start: " + sLine.start + " end: " + sLine.end);
                 return merge(Arrays.asList(fLine.start, fLine.end, sLine.start, sLine.end), true);
             }
         } else if (isNearVertical() && line.isNearVertical()) {
