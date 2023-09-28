@@ -4,14 +4,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
-
     defaultConfig {
         applicationId "devliving.online.cvscannersample"
         minSdkVersion 21
-        targetSdkVersion 33
+        compileSdk 34
+        targetSdkVersion 34
         versionCode 3
-        versionName "1.0.2"
+        versionName "1.1"
     }
     buildTypes {
         release {
