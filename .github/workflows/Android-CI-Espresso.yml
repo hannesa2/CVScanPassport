@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     name: Build JDK ${{ matrix.java_version }}
-    runs-on: macOS-latest
+    runs-on: macOS-13
     strategy:
       matrix:
         java_version: [ 17 ]
@@ -39,10 +39,10 @@ jobs:
           path: app/build/reports/lint-results.html
 #  Espresso:
 #    name: Espresso ${{ matrix.java_version }}
-#    runs-on: macOS-latest
+#    runs-on: macOS-13
 #    strategy:
 #      matrix:
-#        java_version: [ 8 ]
+#        java_version: [ 17 ]
 #    steps:
 #      - name: Checkout
 #        uses: actions/checkout@v4
