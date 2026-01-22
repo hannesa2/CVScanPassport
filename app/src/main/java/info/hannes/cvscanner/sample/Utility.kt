@@ -22,8 +22,7 @@ object Utility {
             val heightRatio = Math.round(height.toFloat() / reqHeight.toFloat())
             val widthRatio = Math.round(width.toFloat() / reqWidth.toFloat())
             // Choose the smallest ratio as inSampleSize value, this will guarantee
-// a final image with both dimensions larger than or equal to the
-// requested height and width.
+            // a final image with both dimensions larger than or equal to the requested height and width.
             inSampleSize = if (heightRatio < widthRatio) heightRatio else widthRatio
         }
         return inSampleSize
