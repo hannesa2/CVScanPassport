@@ -7,50 +7,57 @@ on:
 
 jobs:
   build:
-    name: Publish aar
-    runs-on: macOS-latest
-    strategy:
-      matrix:
-        java_version: [ 17 ]
+    name: Publish release
+    runs-on: ubuntu-22.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Show tags
-        run: git tag -n
-      - name: Install JDK ${{ matrix.java_version }}
-        uses: actions/setup-java@v4
+          submodules: true
+      - name: Install JDK
+        uses: actions/setup-java@v5
         with:
-          distribution: 'adopt'
-          java-version: ${{ matrix.java_version }}
+          distribution: "adopt"
+          java-version: 17
+      - name: Get the version
+        id: tagger
+        uses: jimschubert/query-tag-action@v2
+        with:
+          skip-unshallow: 'true'
+          abbrev: false
+          commit-ish: HEAD
       - name: Install Android SDK
-        uses: malinskiy/action-android/install-sdk@release/0.1.4
+        uses: hannesa2/action-android/install-sdk@0.17.0
       - name: Build project
-        run: ./gradlew clean assembleRelease
+        run: ./gradlew assembleRelease
         env:
-          TAG_VERSION: ${{ github.ref }}
-      - name: Search for aar file
-        run: echo "AAR_RELASE_FILE=$(find . -name *release.aar | head -n 1)" >> $GITHUB_ENV
-      - name: Search for AAR release name
-        run: echo "AAR_RELASE_NAME=$(find . -name *release.aar | head -n 1 | xargs basename)" >> $GITHUB_ENV
+          VERSION: ${{ github.ref }}
+
+#      - name: Publish to github package
+#        run: |
+#          signing/decrypt.sh
+#          cat signing/gradle_secure.properties >> gradle.properties
+#          ./gradlew publish
+#        env:
+#          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
+#          GITHUBACTOR: ${{ secrets.GITHUBACTOR }}
+#          GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
+
+#      - name: Publish mavenCentral (stage)
+#        run: |
+#          signing/decrypt.sh
+#          cat signing/gradle_secure.properties >> gradle.properties
+#          ./gradlew cvscanner:publishMavenPublicationToMavenCentralRepository
+#        env:
+#          CRYPT_PASS: ${{ secrets.CRYPT_PASS }}
+
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1.1.4
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{steps.tagger.outputs.tag}}
+          name: ${{steps.tagger.outputs.tag}}
+          generate_release_notes: true
+          body: ${{steps.github_release.outputs.changelog}}
+          files: cvscanner/build/outputs/aar/cvscanner-release.aar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ${{ env.AAR_RELASE_FILE }}
-          asset_name: ${{ env.AAR_RELASE_NAME }}
-          asset_content_type: application/zip
