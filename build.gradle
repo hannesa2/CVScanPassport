@@ -1,12 +1,12 @@
 buildscript {
-    ext.kotlin_version = '2.3.20'
+    ext.kotlin_version = "2.3.20"
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:9.1.0'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath "com.android.tools.build:gradle:9.1.0"
+        classpath "com.github.dcendents:android-maven-gradle-plugin:2.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -15,9 +15,9 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
+        maven { url "https://jitpack.io" }
         maven {
-            url 'https://artifactory.mxtracks.info/artifactory/gradle-dev-local/'
+            url "https://artifactory.mxtracks.info/artifactory/gradle-dev-local/"
 
             //            def artifactoryPW = project.hasProperty("artifactory_password") ? artifactory_password : System.getenv("ARTIFACTORY_USER_PASSWORD")
             //            if (artifactoryPW == null) {

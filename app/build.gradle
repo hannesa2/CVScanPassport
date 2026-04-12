@@ -1,9 +1,10 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
+    id "com.android.application"
 }
 
 android {
+    namespace "info.hannes.cvscanner.sample"
+
     defaultConfig {
         applicationId "devliving.online.cvscannersample"
         minSdkVersion 23
@@ -15,22 +16,18 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = '17'
-    }
-    namespace 'info.hannes.cvscanner.sample'
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.7.1'
-    implementation 'com.google.android.material:material:1.13.0'
-    implementation 'com.getbase:floatingactionbutton:1.10.1'
-    implementation project(':cvscanner')
+    implementation "androidx.appcompat:appcompat:1.7.1"
+    implementation "com.google.android.material:material:1.13.0"
+    implementation "com.getbase:floatingactionbutton:1.10.1"
+    implementation project(":cvscanner")
 }
