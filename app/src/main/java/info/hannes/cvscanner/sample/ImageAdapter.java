@@ -113,7 +113,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageViewHolder> {
     }
 
     public void clear() {
-        if (imageUris.size() > 0) {
+        if (!imageUris.isEmpty()) {
             List<String> paths = new ArrayList(imageUris);
             imageUris.clear();
             notifyDataSetChanged();
