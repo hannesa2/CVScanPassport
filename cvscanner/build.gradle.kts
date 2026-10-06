@@ -35,7 +35,7 @@ android {
 
 dependencies {
     testImplementation("junit:junit:4.13.2")
-    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("androidx.appcompat:appcompat:1.8.0")
     implementation("androidx.exifinterface:exifinterface:1.4.2")
     implementation("com.google.android.gms:play-services-basement:18.10.0")
     implementation("com.google.android.gms:play-services-vision:20.1.3")
