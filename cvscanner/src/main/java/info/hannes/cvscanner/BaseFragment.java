@@ -10,8 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Point;
 
@@ -21,22 +19,11 @@ public abstract class BaseFragment extends Fragment implements ImageSaveTask.Sav
 
     protected boolean isBusy = false;
     protected CVScanner.ImageProcessorCallback mCallback = null;
-    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(getActivity()) {
-        @Override
-        public void onManagerConnected(int status) {
-            if (status == LoaderCallbackInterface.SUCCESS) {
-                onOpenCVConnected();
-            } else {
-                onOpenCVConnectionFailed();
-            }
-        }
-    };
-
     protected void loadOpenCV() {
-        if (!OpenCVLoader.initDebug()) {
-            //OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_1_0, getActivity().getApplicationContext(), mLoaderCallback);
+        if (OpenCVLoader.initDebug()) {
+            onOpenCVConnected();
         } else {
-            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+            onOpenCVConnectionFailed();
         }
     }
 

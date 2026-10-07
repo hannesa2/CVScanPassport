@@ -16,6 +16,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.geometry.Geometry;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
@@ -159,7 +160,7 @@ public class CVProcessor {
         Collections.sort(contours, new Comparator<MatOfPoint>() {
             @Override
             public int compare(MatOfPoint o1, MatOfPoint o2) {
-                return Double.valueOf(Imgproc.contourArea(o2)).compareTo(Imgproc.contourArea(o1));
+                return Double.valueOf(Geometry.contourArea(o2)).compareTo(Geometry.contourArea(o1));
             }
         });
 
@@ -225,7 +226,7 @@ public class CVProcessor {
         Collections.sort(contours, new Comparator<MatOfPoint>() {
             @Override
             public int compare(MatOfPoint o1, MatOfPoint o2) {
-                return Double.valueOf(Imgproc.contourArea(o2)).compareTo(Imgproc.contourArea(o1));
+                return Double.valueOf(Geometry.contourArea(o2)).compareTo(Geometry.contourArea(o1));
             }
         });
 
@@ -268,11 +269,11 @@ public class CVProcessor {
         Collections.sort(contours, new Comparator<MatOfPoint>() {
             @Override
             public int compare(MatOfPoint o1, MatOfPoint o2) {
-                return Double.valueOf(Imgproc.contourArea(o2)).compareTo(Imgproc.contourArea(o1));
+                return Double.valueOf(Geometry.contourArea(o2)).compareTo(Geometry.contourArea(o1));
             }
         });
 
-        Rect box = Imgproc.boundingRect(contours.get(0));
+        Rect box = Geometry.boundingRect(contours.get(0));
         Imgproc.line(dilatedImg, box.tl(), new Point(box.br().x, box.tl().y), new Scalar(255, 255, 255), 2);
 
         contours = new ArrayList<>();
@@ -286,7 +287,7 @@ public class CVProcessor {
         Collections.sort(contours, new Comparator<MatOfPoint>() {
             @Override
             public int compare(MatOfPoint o1, MatOfPoint o2) {
-                return Double.valueOf(Imgproc.contourArea(o2)).compareTo(Imgproc.contourArea(o1));
+                return Double.valueOf(Geometry.contourArea(o2)).compareTo(Geometry.contourArea(o1));
             }
         });
 
@@ -317,7 +318,7 @@ public class CVProcessor {
         Imgproc.Canny(resizedImg, cannedImg, 70, 200, 3, true);
         resizedImg.release();
 
-        Mat morphR = Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT, new Size(5, 5));
+        Mat morphR = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
 
         Imgproc.morphologyEx(cannedImg, cannedImg, Imgproc.MORPH_CLOSE, morphR, new Point(-1, -1), 1);
 
@@ -455,9 +456,9 @@ public class CVProcessor {
 
         for (MatOfPoint c : contours) {
             MatOfPoint2f c2f = new MatOfPoint2f(c.toArray());
-            double peri = Imgproc.arcLength(c2f, true);
+            double peri = Geometry.arcLength(c2f, true);
             MatOfPoint2f approx = new MatOfPoint2f();
-            Imgproc.approxPolyDP(c2f, approx, 0.02 * peri, true);
+            Geometry.approxPolyDP(c2f, approx, 0.02 * peri, true);
 
             Point[] points = approx.toArray();
             Log.d("SCANNER", "approx size: " + points.length);
@@ -491,7 +492,7 @@ public class CVProcessor {
         int frameWidth = Double.valueOf(frameSize / ratio).intValue();
 
         for (MatOfPoint c : contours) {
-            Rect bRect = Imgproc.boundingRect(c);
+            Rect bRect = Geometry.boundingRect(c);
             float aspectRatio = bRect.width / (float) bRect.height;
             float coverageRatio = frameSize != 0 ? bRect.width / (float) frameWidth : bRect.width / (float) width;
 
@@ -499,9 +500,9 @@ public class CVProcessor {
 
             if (aspectRatio > requiredAspectRatio && coverageRatio > requiredCoverageRatio) {
                 MatOfPoint2f c2f = new MatOfPoint2f(c.toArray());
-                double peri = Imgproc.arcLength(c2f, true);
+                double peri = Geometry.arcLength(c2f, true);
                 MatOfPoint2f approx = new MatOfPoint2f();
-                Imgproc.approxPolyDP(c2f, approx, 0.02 * peri, true);
+                Geometry.approxPolyDP(c2f, approx, 0.02 * peri, true);
 
                 Point[] points = approx.toArray();
                 Log.d("SCANNER", "approx size: " + points.length);
@@ -517,8 +518,8 @@ public class CVProcessor {
                         foundPoints = points;
                     } else {
                         //try to merge
-                        RotatedRect box1 = Imgproc.minAreaRect(new MatOfPoint2f(c.toArray()));
-                        RotatedRect box2 = Imgproc.minAreaRect(new MatOfPoint2f(rectContour.toArray()));
+                        RotatedRect box1 = Geometry.minAreaRect(new MatOfPoint2f(c.toArray()));
+                        RotatedRect box2 = Geometry.minAreaRect(new MatOfPoint2f(rectContour.toArray()));
 
                         float ar = (float) (box1.size.width / box2.size.width);
                         if (box1.size.width > 0 && box2.size.width > 0 && 0.5 < ar && ar < 2.0) {
@@ -705,7 +706,7 @@ public class CVProcessor {
         src_mat.put(0, 0, tl.x, tl.y, tr.x, tr.y, br.x, br.y, bl.x, bl.y);
         dst_mat.put(0, 0, 0.0, 0.0, dw, 0.0, dw, dh, 0.0, dh);
 
-        Mat m = Imgproc.getPerspectiveTransform(src_mat, dst_mat);
+        Mat m = Geometry.getPerspectiveTransform(src_mat, dst_mat);
 
         Imgproc.warpPerspective(src, doc, m, doc.size());
 

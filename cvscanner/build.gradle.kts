@@ -40,10 +40,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-basement:18.11.0")
     implementation("com.google.android.gms:play-services-vision:20.1.3")
     implementation("com.github.hannesa2:AndroidVisionPipeline:1.3")
-    // The source code of OpenCV is here https://git.mxtracks.info/opencv/openCV-android-sdk
-    // The code was too big for github, but the main problem was jitpack.io was not able to build
-    // https://github.com/jitpack/jitpack.io/issues/4119
-    api("OpenCV_all_together_samples:opencv:4.7.0.0")
+    api("org.opencv:opencv:5.0.0.1")
 }
 
 afterEvaluate {
