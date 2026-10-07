@@ -14,6 +14,7 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Point;
 
 import info.hannes.cvscanner.util.ImageSaveTask;
+import timber.log.Timber;
 
 public abstract class BaseFragment extends Fragment implements ImageSaveTask.SaveCallback {
 
@@ -57,7 +58,7 @@ public abstract class BaseFragment extends Fragment implements ImageSaveTask.Sav
 
     @Override
     public void onSaved(String path) {
-        Log.d("BASE", "saved at: " + path);
+        Timber.d("saved at: " + path);
         if (mCallback != null) mCallback.onImageProcessed(path);
         isBusy = false;
     }

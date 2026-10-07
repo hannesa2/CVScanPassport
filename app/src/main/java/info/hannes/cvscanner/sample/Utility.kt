@@ -8,11 +8,7 @@ object Utility {
         if (filePath != null) {
             val file = File(filePath)
             if (file.exists()) {
-                return if (file.delete()) {
-                    true
-                } else {
-                    file.absoluteFile.delete()
-                }
+                return file.delete() || file.absoluteFile.delete()
             }
         }
         return false
