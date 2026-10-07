@@ -12,6 +12,8 @@ import org.opencv.core.Size;
 
 import java.io.IOException;
 
+import timber.log.Timber;
+
 
 public class ImageSaveTask extends AsyncTask<Void, Void, String> {
     Bitmap image;
@@ -58,7 +60,7 @@ public class ImageSaveTask extends AsyncTask<Void, Void, String> {
         Mat croppedImage = CVProcessor.fourPointTransform(imageMat, points);
         imageMat.release();
 
-        Mat enhancedImage = CVProcessor.adjustBirghtnessAndContrast(croppedImage, 1);
+        Mat enhancedImage = CVProcessor.adjustBrightnessAndContrast(croppedImage, 1);
         croppedImage.release();
 
         enhancedImage = CVProcessor.sharpenImage(enhancedImage);
@@ -69,7 +71,7 @@ public class ImageSaveTask extends AsyncTask<Void, Void, String> {
             enhancedImage.release();
             Util.setExifRotation(mContext, Util.getUriFromPath(imagePath), rotation);
         } catch (IOException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
 
         return imagePath;

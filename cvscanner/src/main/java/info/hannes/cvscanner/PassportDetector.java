@@ -1,7 +1,5 @@
 package info.hannes.cvscanner;
 
-import android.graphics.Bitmap;
-import android.os.Environment;
 import android.util.SparseArray;
 
 import com.google.android.gms.vision.Detector;
@@ -14,9 +12,6 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Size;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -42,28 +37,6 @@ public class PassportDetector extends Detector<Document> {
         if (doc != null) detections.append(frame.getMetadata().getId(), doc);
 
         return detections;
-    }
-
-    public String saveBitmapJPG(Bitmap img, String imageName) {
-        File dir = new File(Environment.getExternalStorageDirectory(), "/" + "CVScannerSample" + "/");
-        dir.mkdirs();
-
-        File file = new File(dir, imageName);
-        FileOutputStream fOut;
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            fOut = new FileOutputStream(file);
-            img.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-            fOut.flush();
-            fOut.close();
-            return file.getAbsolutePath();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     Document detectDocument(Frame frame) {
