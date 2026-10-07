@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "info.hannes.cvscanner.sample"
-    compileSdk = 34
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "devliving.online.cvscannersample"
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 37
         versionCode = 3
         versionName = "1.1"
     }
