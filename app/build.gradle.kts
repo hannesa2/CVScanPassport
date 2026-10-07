@@ -8,8 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "devliving.online.cvscannersample"
-        minSdk = 23
-        targetSdk = 37
+        minSdk = 24
         versionCode = 3
         versionName = "1.1"
     }
