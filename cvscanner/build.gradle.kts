@@ -9,7 +9,7 @@ version = "1.4"
 
 android {
     namespace = "info.hannes.cvscanner"
-    compileSdk = 34
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 23
