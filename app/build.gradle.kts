@@ -29,7 +29,7 @@ android {
 
 dependencies {
     implementation("androidx.appcompat:appcompat:1.8.0")
-    implementation("com.google.android.material:material:1.13.0")
+    implementation("com.google.android.material:material:1.14.0")
     implementation("com.getbase:floatingactionbutton:1.10.1")
     implementation(project(":cvscanner"))
 }
