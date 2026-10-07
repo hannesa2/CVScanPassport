@@ -24,8 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
@@ -39,6 +37,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.geometry.Geometry;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.FileNotFoundException;
@@ -69,10 +68,9 @@ public class StepByStepTestActivity extends AppCompatActivity {
 
     Mat mData = null;
 
-    BaseLoaderCallback mCallback = new BaseLoaderCallback(this) {
+    Runnable mCallback = new Runnable() {
         @Override
-        public void onManagerConnected(int status) {
-            super.onManagerConnected(status);
+        public void run() {
 
             fab.setScaleX(0.1f);
             fab.setScaleY(0.1f);
@@ -128,9 +126,7 @@ public class StepByStepTestActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (!OpenCVLoader.initDebug()) {
-            //OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_1_0, getApplicationContext(), mCallback);
-        } else mCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        if (OpenCVLoader.initDebug()) mCallback.run();
     }
 
     @Override
@@ -255,7 +251,7 @@ public class StepByStepTestActivity extends AppCompatActivity {
     }
 
     Mat buildSkeleton(Mat img) {
-        Mat morph = Imgproc.getStructuringElement(Imgproc.CV_SHAPE_CROSS, new Size(3, 3));
+        Mat morph = Imgproc.getStructuringElement(Imgproc.MORPH_CROSS, new Size(3, 3));
         Mat skel = new Mat(img.size(), CvType.CV_8UC1, Scalar.all(0));
         Mat eroded = new Mat();
         Mat temp = new Mat();
@@ -349,7 +345,7 @@ public class StepByStepTestActivity extends AppCompatActivity {
                         Collections.sort(contours, new Comparator<MatOfPoint>() {
                             @Override
                             public int compare(MatOfPoint o1, MatOfPoint o2) {
-                                return Double.compare(Imgproc.contourArea(o2), Imgproc.contourArea(o1));
+                                return Double.compare(Geometry.contourArea(o2), Geometry.contourArea(o1));
                             }
                         });
 
@@ -364,9 +360,9 @@ public class StepByStepTestActivity extends AppCompatActivity {
 
                         for (MatOfPoint contour : contours) {
                             MatOfPoint2f mat = new MatOfPoint2f(contour.toArray());
-                            double peri = Imgproc.arcLength(mat, true);
+                            double peri = Geometry.arcLength(mat, true);
                             MatOfPoint2f approx = new MatOfPoint2f();
-                            Imgproc.approxPolyDP(mat, approx, 0.02 * peri, true);
+                            Geometry.approxPolyDP(mat, approx, 0.02 * peri, true);
 
                             Point[] points = approx.toArray();
                             Log.d("SCANNER", "approx size " + points.length);
@@ -424,9 +420,9 @@ public class StepByStepTestActivity extends AppCompatActivity {
                         //resizedImg.release();
                         onNextStep(cannedImg);
 
-                        //morph = Imgproc.getStructuringElement(Imgproc.CV_SHAPE_CROSS, new Size(5, 5));
-                        Mat morphR = Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT, new Size(5, 5));
-                        //Mat morphE = Imgproc.getStructuringElement(Imgproc.CV_SHAPE_ELLIPSE, new Size(3, 3));
+                        //morph = Imgproc.getStructuringElement(Imgproc.MORPH_CROSS, new Size(5, 5));
+                        Mat morphR = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+                        //Mat morphE = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(3, 3));
 
                         Imgproc.morphologyEx(cannedImg, cannedImg, Imgproc.MORPH_CLOSE, morphR, new Point(-1, -1), 1);
                         //Imgproc.morphologyEx(cannedImg, cannedImg, Imgproc.MORPH_DILATE, morph, new Point(-1, -1), 1);
@@ -640,7 +636,7 @@ public class StepByStepTestActivity extends AppCompatActivity {
                         Collections.sort(contours, new Comparator<MatOfPoint>() {
                             @Override
                             public int compare(MatOfPoint o1, MatOfPoint o2) {
-                                return Double.compare(Imgproc.contourArea(o2), Imgproc.contourArea(o1));
+                                return Double.compare(Geometry.contourArea(o2), Geometry.contourArea(o1));
                             }
                         });
 
@@ -648,7 +644,7 @@ public class StepByStepTestActivity extends AppCompatActivity {
                         foundPoints = null;
 
                         for (MatOfPoint c : contours) {
-                            Rect bRect = Imgproc.boundingRect(c);
+                            Rect bRect = Geometry.boundingRect(c);
                             float aspectRatio = bRect.width / (float) bRect.height;
                             float coverageRatio = bRect.width / (float) col;
 
@@ -659,9 +655,9 @@ public class StepByStepTestActivity extends AppCompatActivity {
                                 onNextStep(resizedImg);
 
                                 MatOfPoint2f c2f = new MatOfPoint2f(c.toArray());
-                                double peri = Imgproc.arcLength(c2f, true);
+                                double peri = Geometry.arcLength(c2f, true);
                                 MatOfPoint2f approx = new MatOfPoint2f();
-                                Imgproc.approxPolyDP(c2f, approx, 0.02 * peri, true);
+                                Geometry.approxPolyDP(c2f, approx, 0.02 * peri, true);
 
                                 Point[] points = approx.toArray();
                                 Log.d("SCANNER", "approx size: " + points.length);
@@ -676,8 +672,8 @@ public class StepByStepTestActivity extends AppCompatActivity {
                                         foundPoints = points;
                                     } else {
                                         //try to merge
-                                        RotatedRect box1 = Imgproc.minAreaRect(new MatOfPoint2f(c.toArray()));
-                                        RotatedRect box2 = Imgproc.minAreaRect(new MatOfPoint2f(rectContour.toArray()));
+                                        RotatedRect box1 = Geometry.minAreaRect(new MatOfPoint2f(c.toArray()));
+                                        RotatedRect box2 = Geometry.minAreaRect(new MatOfPoint2f(rectContour.toArray()));
 
                                         float ar = (float) (box1.size.width / box2.size.width);
                                         if (box1.size.width > 0 && box2.size.width > 0 && 0.5 < ar && ar < 2.0) {
@@ -814,7 +810,7 @@ public class StepByStepTestActivity extends AppCompatActivity {
                         Collections.sort(contours, new Comparator<MatOfPoint>() {
                             @Override
                             public int compare(MatOfPoint o1, MatOfPoint o2) {
-                                return Double.compare(Imgproc.contourArea(o2), Imgproc.contourArea(o1));
+                                return Double.compare(Geometry.contourArea(o2), Geometry.contourArea(o1));
                             }
                         });
 
@@ -822,7 +818,7 @@ public class StepByStepTestActivity extends AppCompatActivity {
                         foundPoints = null;
 
                         for (MatOfPoint c : contours) {
-                            Rect bRect = Imgproc.boundingRect(c);
+                            Rect bRect = Geometry.boundingRect(c);
                             float aspectRatio = bRect.width / (float) bRect.height;
                             float coverageRatio = bRect.width / (float) col;
 
@@ -833,9 +829,9 @@ public class StepByStepTestActivity extends AppCompatActivity {
                                 //onNextStep(resizedImg);
 
                                 MatOfPoint2f c2f = new MatOfPoint2f(c.toArray());
-                                double peri = Imgproc.arcLength(c2f, true);
+                                double peri = Geometry.arcLength(c2f, true);
                                 MatOfPoint2f approx = new MatOfPoint2f();
-                                Imgproc.approxPolyDP(c2f, approx, 0.02 * peri, true);
+                                Geometry.approxPolyDP(c2f, approx, 0.02 * peri, true);
 
                                 Point[] points = approx.toArray();
                                 Log.d("SCANNER", "approx size: " + points.length);
@@ -850,8 +846,8 @@ public class StepByStepTestActivity extends AppCompatActivity {
                                         foundPoints = points;
                                     } else {
                                         //try to merge
-                                        RotatedRect box1 = Imgproc.minAreaRect(new MatOfPoint2f(c.toArray()));
-                                        RotatedRect box2 = Imgproc.minAreaRect(new MatOfPoint2f(rectContour.toArray()));
+                                        RotatedRect box1 = Geometry.minAreaRect(new MatOfPoint2f(c.toArray()));
+                                        RotatedRect box2 = Geometry.minAreaRect(new MatOfPoint2f(rectContour.toArray()));
 
                                         float ar = (float) (box1.size.width / box2.size.width);
                                         if (box1.size.width > 0 && box2.size.width > 0 && 0.5 < ar && ar < 2.0) {
@@ -945,7 +941,7 @@ public class StepByStepTestActivity extends AppCompatActivity {
                             Collections.sort(contours, new Comparator<MatOfPoint>() {
                                 @Override
                                 public int compare(MatOfPoint o1, MatOfPoint o2) {
-                                    return Double.compare(Imgproc.contourArea(o2), Imgproc.contourArea(o1));
+                                    return Double.compare(Geometry.contourArea(o2), Geometry.contourArea(o1));
                                 }
                             });
 
@@ -958,9 +954,9 @@ public class StepByStepTestActivity extends AppCompatActivity {
 
                             for (MatOfPoint contour : contours) {
                                 MatOfPoint2f mat = new MatOfPoint2f(contour.toArray());
-                                double peri = Imgproc.arcLength(mat, true);
+                                double peri = Geometry.arcLength(mat, true);
                                 MatOfPoint2f approx = new MatOfPoint2f();
-                                Imgproc.approxPolyDP(mat, approx, 0.02 * peri, true);
+                                Geometry.approxPolyDP(mat, approx, 0.02 * peri, true);
 
                                 Point[] points = approx.toArray();
                                 Log.d("SCANNER", "approx size " + points.length);
