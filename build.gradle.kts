@@ -17,7 +17,6 @@ allprojects {
         google()
         mavenCentral()
         maven(url = uri("https://jitpack.io"))
-        maven(url = uri("https://artifactory.mxtracks.info/artifactory/gradle-dev-local/"))
     }
 }
 
