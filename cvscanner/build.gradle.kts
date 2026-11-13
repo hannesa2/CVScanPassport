@@ -40,7 +40,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-basement:18.12.0")
     implementation("com.google.android.gms:play-services-vision:20.1.3")
     implementation("com.github.hannesa2:AndroidVisionPipeline:1.3")
-    api("org.opencv:opencv:5.0.0.1")
+    api("org.opencv:opencv:5.1.0")
 }
 
 afterEvaluate {
